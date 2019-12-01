@@ -1,0 +1,33 @@
+num_open_invoices,Number of invoices with a positive outstanding balance that have not been sent to collection.
+num_past_invoices,Number of invoices that have either been fully paid or have been sent to collection.
+amount_due_after_insurance,Total amount due after insurance (before any payment).
+collected_before_assignment,Total amount that was collected before the invoices were assigned to Cedar (usually copays paid during the visit)
+amount_already_collected,Total amount that has been already collected for all 'open' invoices.
+amount_outstanding,Total amount the patient owes as of February 1st 2019.
+amount_in_collections,Total amount from past invoices that have not been collected and been sent to collection.
+num_insurers,Number of unique insurances involved in the open invoices. 
+num_prev_visits,Number of visits from past invoices
+num_invoices_in_collections,Number of past invoices that have been sent to collection.
+count_prev_payments,Number of payments made for past invoices
+days_since_earliest_invoice_ready,Days since the earliest 'open' invoice was sent
+days_since_latest_invoice_ready,Days since the latest 'open' invoice was sent
+days_since_earliest_visit,Days since the visit associated with the earliest 'open' invoice
+days_since_latest_visit,Days since the visit associated with the latest 'open' invoice
+days_btw_first_last_visit,Days between the earliest and the latest visit
+days_btw_first_last_invoice,Days between the earliest and the latest invoice
+days_from_visit_to_receiving_bill,Days between the earliest visit and the earliest 'open' invoice received
+patient_age_bucket,Age of the patient (not the guarantor) grouped by decade
+has_email,The guarantor has an email on file and has given consent
+has_cell,The guarantor has a cell phone on file and has given consent
+has_paper,The guarantor has an address on file
+has_ecomms,The guarantor has either a cell phone or an email on file and has given consent 
+prev_num_communications,"Number of communications (paper statement, emails É) from past invoices"
+prev_engagements,Total number of visits on our platform for past invoices
+num_current_chat_messages,Number of chat messages from open invoices
+num_current_communications,"Number of communications (paper statement, emails É) from open invoices"
+current_link_login_engagements,Number of times the guarantor checked our platform and saw his or her open invoices
+current_checkout_view_engagements,Number of times the guarantor loged in to our platform and saw his or her open invoices
+current_engagements,Total number of visits on our platform for open invoices
+median_household_income,Median Household income of the ZIP code the guarantor is from (Census data)
+median_home_value,Median Home Value of the ZIP code the guarantor is from (Census data)
+any_payment_made_within_120,Has the guarantor made any payment within 120 days after Feb 1st 2019
