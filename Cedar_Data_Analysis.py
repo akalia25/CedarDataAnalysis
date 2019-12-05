@@ -22,12 +22,30 @@ def analysis(df):
     dfStd = df.std()
     ax = sns.distplot(df.amount_due_after_insurance, rug=True,
                       hist=False, axlabel='Amount Due After Insurance')
-    feature_cols = ['amount_outstanding' , 'num_insurers' , 'has_ecomms',
-                    'current_engagements', 'median_household_income']
+    df = df.fillna('0')
+    logreg = LogisticRegression()
+    cols = df.columns.values.tolist()
+    cols.remove('patient_age_bucket')
+    cols.remove('any_payment_made_within_120')
+    X = df[cols]
+    y = df['any_payment_made_within_120']
+    X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20,random_state=0)
+    logreg.fit(X_train,y_train)
+    y_pred=logreg.predict(X_test)
+    selector = RFE(logreg, n_features_to_select = 10)
+    selector = selector.fit(X_train, y_train)
+    order = selector.ranking_
+    feature_ranks = []
+    for idx, item in enumerate(selector.ranking_):
+        feature_ranks.append(cols[idx] + ' rank: ' + str(item))
+    feature_cols = []
+    for idx, item in enumerate(selector.support_):
+        if item == True:
+            feature_cols.append(cols[idx])
+
     X = df[feature_cols]
     y = df['any_payment_made_within_120']
     X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20,random_state=0)
-    logreg = LogisticRegression()
     logreg.fit(X_train,y_train)
     y_pred=logreg.predict(X_test)
     print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
@@ -49,12 +67,7 @@ def analysis(df):
     plt.tight_layout()
     plt.show()
 
-    selector = RFE(logreg, n_features_to_select = 1)
-    selector = selector.fit(X_train, y_train)
-    order = selector.ranking_
-    feature_ranks = []
-    for i in order:
-        feature_ranks.append(f"{i}. {feature_cols[i-1]}")
+
     print(feature_ranks)
 def main():
     df = uploadfile()
