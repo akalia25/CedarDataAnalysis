@@ -23,6 +23,13 @@ def analysis(df):
     ax = sns.distplot(df.amount_due_after_insurance, rug=True,
                       hist=False, axlabel='Amount Due After Insurance')
     df = df.fillna('0')
+    patient_max_age = []
+    for row in df['patient_age_bucket']:
+        if len(row) > 1:
+            patient_max_age.append(row[-2:])
+        else:
+            patient_max_age.append(0)
+    df['patient_max_age'] = patient_max_age
     logreg = LogisticRegression()
     cols = df.columns.values.tolist()
     cols.remove('patient_age_bucket')
