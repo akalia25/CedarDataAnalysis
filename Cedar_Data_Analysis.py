@@ -20,8 +20,6 @@ def analysis(df):
     dfMean = df.mean()
     dfMedian = df.median()
     dfStd = df.std()
-    ax = sns.distplot(df.amount_due_after_insurance, rug=True,
-                      hist=False, axlabel='Amount Due After Insurance')
     df = df.fillna('0')
     patient_max_age = []
     for row in df['patient_age_bucket']:
@@ -36,10 +34,10 @@ def analysis(df):
     cols.remove('any_payment_made_within_120')
     X = df[cols]
     y = df['any_payment_made_within_120']
-    X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20,random_state=0)
-    logreg.fit(X_train,y_train)
+    X_train,X_test,y_train, y_test=train_test_split(X, y, test_size=0.20,random_state=0)
+    logreg.fit(X_train, y_train)
     y_pred=logreg.predict(X_test)
-    selector = RFE(logreg, n_features_to_select = 10)
+    selector = RFE(logreg, n_features_to_select=15)
     selector = selector.fit(X_train, y_train)
     order = selector.ranking_
     feature_ranks = []
@@ -49,7 +47,6 @@ def analysis(df):
     for idx, item in enumerate(selector.support_):
         if item == True:
             feature_cols.append(cols[idx])
-
     X = df[feature_cols]
     y = df['any_payment_made_within_120']
     X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.20,random_state=0)
@@ -57,29 +54,23 @@ def analysis(df):
     y_pred=logreg.predict(X_test)
     print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
     print("Precision:",metrics.precision_score(y_test, y_pred))
-    print("Recall:",metrics.recall_score(y_test, y_pred))
-
+    print(metrics.confusion_matrix(y_test, y_pred))
     feature_importance = abs(logreg.coef_[0])
     feature_importance = 100.0 * (feature_importance / feature_importance.max())
     sorted_idx = np.argsort(feature_importance)
     pos = np.arange(sorted_idx.shape[0]) + .5
-
     featfig = plt.figure()
     featax = featfig.add_subplot(1, 1, 1)
     featax.barh(pos, feature_importance[sorted_idx], align='center')
     featax.set_yticks(pos)
     featax.set_yticklabels(np.array(X.columns)[sorted_idx], fontsize=8)
     featax.set_xlabel('Relative Feature Importance')
-
     plt.tight_layout()
     plt.show()
 
-
-    print(feature_ranks)
 def main():
     df = uploadfile()
-    print(df.head())
-
+    analysis(df)
 
 if __name__ == '__main__':
     main()
